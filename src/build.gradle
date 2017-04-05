@@ -1,0 +1,29 @@
+group 'org.gradle.scraper'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+idea {
+
+    module {
+        sourceDirs += file('/src/main')
+        testSourceDirs += file('/src/test')
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'org.hibernate.ogm', name: 'hibernate-ogm-core', version: '5.0.4.Final'
+    compile group: 'org.hibernate.ogm', name: 'hibernate-ogm-mongodb', version: '5.0.4.Final'
+    compile group: 'com.h2database', name: 'h2', version: '1.4.194'
+    compile group: 'org.jboss.jbossts', name: 'jbossjta', version: '4.16.6.Final'
+}
