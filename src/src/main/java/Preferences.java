@@ -2,6 +2,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class Preferences {
@@ -15,7 +16,7 @@ public class Preferences {
     private String name;
 
     @ElementCollection
-    private HashMap<String, String> dataToGather = new HashMap<String, String>();
+    private Map<String, String> dataToGather = new HashMap<String, String>();
 
     public Preferences() {}
 
@@ -39,7 +40,7 @@ public class Preferences {
         dataToGather.remove(key);
     }
 
-    public HashMap<String, String> getDataToGather() {
+    public Map<String, String> getDataToGather() {
         return dataToGather;
     }
 }

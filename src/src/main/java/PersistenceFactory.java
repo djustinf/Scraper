@@ -27,6 +27,6 @@ public class PersistenceFactory {
     }
 
     private void createEntityManagerFactory() {
-        singleton = Persistence.createEntityManagerFactory("schedPU");
+        singleton = Persistence.createEntityManagerFactory("productDB");
     }
 }

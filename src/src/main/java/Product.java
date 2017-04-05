@@ -47,4 +47,9 @@ public class Product {
     public String getSiteName() {
         return siteName;
     }
+
+    @Override
+    public String toString() {
+        return siteName + "-" + product;
+    }
 }
