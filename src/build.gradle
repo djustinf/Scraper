@@ -23,7 +23,7 @@ idea {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile group: 'org.hibernate.ogm', name: 'hibernate-ogm-core', version: '5.0.4.Final'
-    compile group: 'org.hibernate.ogm', name: 'hibernate-ogm-mongodb', version: '5.0.4.Final'
     compile group: 'com.h2database', name: 'h2', version: '1.4.194'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.3.1'
     compile group: 'org.jboss.jbossts', name: 'jbossjta', version: '4.16.6.Final'
 }
