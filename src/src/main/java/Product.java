@@ -13,10 +13,13 @@ public class Product {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String product;
+    private double cost;
+    private String brand;
 
     @Column(unique = true)
-    private String pageUrl;
-    private String siteName;
+    private String amazonUrl;
+    @Column(unique = true)
+    private String ebayUrl;
 
     public Product() {}
 
@@ -24,12 +27,28 @@ public class Product {
         this.product = product;
     }
 
-    public void setPageUrl(String pageUrl) {
-        this.pageUrl = pageUrl;
+    public void setEbayUrl(String pageUrl) {
+        this.ebayUrl = pageUrl;
     }
 
-    public void setSiteName(String siteName) {
-        this.siteName = siteName;
+    public void setAmazonUrl(String pageUrl) {
+        this.amazonUrl = pageUrl;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public double getCost() {
+        return cost;
     }
 
     public String getId() {
@@ -40,16 +59,16 @@ public class Product {
         return product;
     }
 
-    public String getPageUrl() {
-        return pageUrl;
+    public String getEbayUrl() {
+        return ebayUrl;
     }
 
-    public String getSiteName() {
-        return siteName;
+    public String getAmazonUrl() {
+        return amazonUrl;
     }
 
     @Override
     public String toString() {
-        return siteName + "-" + product;
+        return brand + "-" + product;
     }
 }
