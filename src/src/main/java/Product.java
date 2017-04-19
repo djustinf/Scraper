@@ -1,9 +1,9 @@
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Product {
@@ -13,8 +13,10 @@ public class Product {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String product;
-    private double cost;
     private String brand;
+
+    @ElementCollection
+    private Map<String, Double> cost = new HashMap<String, Double>();
 
     @Column(unique = true)
     private String amazonUrl;
@@ -39,15 +41,15 @@ public class Product {
         this.brand = brand;
     }
 
-    public void setCost(double cost) {
-        this.cost = cost;
+    public void addCost(String desc, double price) {
+        cost.put(desc, price);
     }
 
     public String getBrand() {
         return brand;
     }
 
-    public double getCost() {
+    public Map<String, Double> getCost() {
         return cost;
     }
 
