@@ -13,61 +13,22 @@ public class ScraperMenu extends JPanel {
     private DefaultListModel searchListModel;
 
     public ScraperMenu() {
-        super(new GridBagLayout());
-        GridBagConstraints c1 = new GridBagConstraints();
-        c1.anchor = GridBagConstraints.WEST;
-        c1.gridx = 0;
-        c1.gridy = 1;
-        c1.gridheight = 3;
-        c1.weightx = 1;
-        GridBagConstraints c2 = new GridBagConstraints();
-        c2.anchor = GridBagConstraints.EAST;
-        c2.gridx = 2;
-        c2.gridy = 1;
-        c2.gridheight = 3;
-        c2.weightx = 1;
-        GridBagConstraints c3 = new GridBagConstraints();
-        c3.anchor = GridBagConstraints.NORTHWEST;
-        c3.gridx = 0;
-        c3.gridy = 0;
-        c3.weightx = 2;
-        GridBagConstraints c4 = new GridBagConstraints();
-        c4.anchor = GridBagConstraints.NORTHEAST;
-        c4.gridx = 2;
-        c4.gridy = 0;
-        c4.weightx = 2;
-        GridBagConstraints c5 = new GridBagConstraints();
-        c5.anchor = GridBagConstraints.NORTH;
-        c5.gridx = 1;
-        c5.gridy = 0;
-        c5.weightx = 1;
-        c5.weighty = 2;
-        GridBagConstraints c6 = new GridBagConstraints();
-        c6.anchor = GridBagConstraints.SOUTHEAST;
-        c6.gridx = 2;
-        c6.gridy = 4;
-        c6.weightx = 1;
-        c6.weighty = 2;
-        GridBagConstraints c7 = new GridBagConstraints();
-        c7.anchor = GridBagConstraints.SOUTHWEST;
-        c7.gridx = 0;
-        c7.gridy = 4;
-        c7.weightx = 1;
-        c7.weighty = 2;
-        GridBagConstraints c8 = new GridBagConstraints();
-        c8.anchor = GridBagConstraints.SOUTH;
-        c8.gridx = 1;
-        c8.gridy = 4;
-        c8.weightx = 1;
-        c8.weighty = 2;
-        add(createAllList(), c1);
-        add(createSearchList(), c2);
-        add(createAddButton(), c3);
-        add(createRemoveButton(), c4);
-        add(createFormButton(), c6);
-        add(createSearchButton(), c5);
-        add(createDeleteButton(), c7);
-        add(createModifyButton(), c8);
+        super(new BorderLayout());
+        JPanel top = new JPanel(new GridLayout());
+        JPanel mid = new JPanel(new GridLayout());
+        JPanel bot = new JPanel(new GridLayout());
+        mid.add(createAllList());
+        mid.add(createSearchList());
+        top.add(createAddButton());
+        top.add(createSearchButton());
+        top.add(createRemoveButton());
+        bot.add(createModifyButton());
+        bot.add(createFormButton());
+        bot.add(createDeleteButton());
+        add(top, BorderLayout.NORTH);
+        add(mid, BorderLayout.CENTER);
+        add(bot, BorderLayout.SOUTH);
+        setPreferredSize(new Dimension(500, 750));
     }
 
     private JPanel createAllList() {
@@ -77,9 +38,7 @@ public class ScraperMenu extends JPanel {
         allList = new JList(allListModel);
         allList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane scrollPane = new JScrollPane(allList);
-        scrollPane.setPreferredSize(new Dimension(250,750));
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JLabel("Product Database"));
         panel.add(scrollPane, BorderLayout.CENTER);
         return panel;
     }
@@ -89,9 +48,7 @@ public class ScraperMenu extends JPanel {
         searchList = new JList(searchListModel);
         searchList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         JScrollPane scrollPane = new JScrollPane(searchList);
-        scrollPane.setPreferredSize(new Dimension(250,750));
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JLabel("Products to Search"));
         panel.add(scrollPane, BorderLayout.CENTER);
         return panel;
     }
@@ -181,6 +138,7 @@ public class ScraperMenu extends JPanel {
     private void displayNewForm() {
         JTextField field1 = new JTextField("<product to search>");
         JTextField field2 = new JTextField("<product brand>");
+        JTextField field5 = new JTextField("<initial cost>");
         JTextField field3 = new JTextField("www.ebay.com/<product URL>");
         JTextField field4 = new JTextField("www.amazon.com/<product URL>");
         JPanel panel = new JPanel(new GridLayout(0, 1));
@@ -188,6 +146,8 @@ public class ScraperMenu extends JPanel {
         panel.add(field1);
         panel.add(new JLabel("Brand"));
         panel.add(field2);
+        panel.add(new JLabel("Cost"));
+        panel.add(field5);
         panel.add(new JLabel("Ebay URL"));
         panel.add(field3);
         panel.add(new JLabel("Amazon URL"));
@@ -200,6 +160,7 @@ public class ScraperMenu extends JPanel {
             product.setBrand(field2.getText());
             product.setEbayUrl(field3.getText());
             product.setAmazonUrl(field4.getText());
+            product.setCost(Double.parseDouble(field5.getText()));
             ProductController.storeProduct(product);
             allListModel.addElement(product);
         }
@@ -215,6 +176,7 @@ public class ScraperMenu extends JPanel {
         Product mod = selected.get(0);
         JTextField field1 = new JTextField(mod.getProduct());
         JTextField field2 = new JTextField(mod.getBrand());
+        JTextField field5 = new JTextField(Double.toString(mod.getCost()));
         JTextField field3 = new JTextField(mod.getEbayUrl());
         JTextField field4 = new JTextField(mod.getAmazonUrl());
         JPanel panel = new JPanel(new GridLayout(0, 1));
@@ -222,6 +184,8 @@ public class ScraperMenu extends JPanel {
         panel.add(field1);
         panel.add(new JLabel("Brand"));
         panel.add(field2);
+        panel.add(new JLabel("Cost"));
+        panel.add(field5);
         panel.add(new JLabel("Ebay URL"));
         panel.add(field3);
         panel.add(new JLabel("Amazon URL"));
@@ -233,6 +197,7 @@ public class ScraperMenu extends JPanel {
             mod.setBrand(field2.getText());
             mod.setEbayUrl(field3.getText());
             mod.setAmazonUrl(field4.getText());
+            mod.setCost(Double.parseDouble(field5.getText()));
             ProductController.modifyProduct(mod.getId(), mod);
             allListModel.remove(indices[0]);
             allListModel.addElement(mod);

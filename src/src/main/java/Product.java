@@ -14,9 +14,10 @@ public class Product {
     private String id;
     private String product;
     private String brand;
+    private  double cost;
 
-    @ElementCollection
-    private Map<String, Double> cost = new HashMap<String, Double>();
+    @Transient
+    private Map<String, Double> price = new HashMap<String, Double>();
 
     @Column(unique = true)
     private String amazonUrl;
@@ -24,6 +25,10 @@ public class Product {
     private String ebayUrl;
 
     public Product() {}
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
 
     public void setProduct(String product) {
         this.product = product;
@@ -41,16 +46,16 @@ public class Product {
         this.brand = brand;
     }
 
-    public void addCost(String desc, double price) {
-        cost.put(desc, price);
+    public void addPrice(String desc, double price) {
+        this.price.put(desc, price);
     }
 
     public String getBrand() {
         return brand;
     }
 
-    public Map<String, Double> getCost() {
-        return cost;
+    public Map<String, Double> getPrice() {
+        return price;
     }
 
     public String getId() {
@@ -67,6 +72,10 @@ public class Product {
 
     public String getAmazonUrl() {
         return amazonUrl;
+    }
+
+    public double getCost() {
+        return cost;
     }
 
     @Override
