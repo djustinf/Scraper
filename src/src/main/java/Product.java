@@ -14,7 +14,7 @@ public class Product {
     private String id;
     private String product;
     private String brand;
-    private  double cost;
+    private double cost;
 
     @Transient
     private Map<String, String> price = new HashMap<String, String>();

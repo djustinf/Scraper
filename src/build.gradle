@@ -26,4 +26,5 @@ dependencies {
     compile group: 'com.h2database', name: 'h2', version: '1.4.194'
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.3.1'
     compile group: 'org.jboss.jbossts', name: 'jbossjta', version: '4.16.6.Final'
+    compile group: 'com.opencsv', name: 'opencsv', version: '3.9'
 }

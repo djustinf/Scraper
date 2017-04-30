@@ -1,11 +1,16 @@
+import com.opencsv.CSVWriter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class ScraperMenu extends JPanel {
 
@@ -113,15 +118,31 @@ public class ScraperMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<Product> selected = searchList.getSelectedValuesList();
-                ExecutorService serv = Executors.newCachedThreadPool();
-                for (int i = 0; i < selected.size(); i++) {
+                List<Product> done = new ArrayList<>();
+                SearchUtils searchUtils = new SearchUtils();
+                ExecutorService serv = Executors.newFixedThreadPool(10);
+                for (Product product : selected) {
                     serv.execute(new Runnable() {
                         @Override
                         public void run() {
-                            //crawl in here
+                            done.add(searchUtils.getData(product));
                         }
                     });
                 }
+                serv.shutdown();
+                try {
+                    while (!serv.awaitTermination(10, TimeUnit.SECONDS));
+                }
+                catch (InterruptedException i) {
+                    System.err.println("Error waiting for threads");
+                }
+                try {
+                    searchUtils.createCSV(done);
+                }
+                catch (IOException a) {
+                    System.err.println("Error creating output.");
+                }
+                JOptionPane.showMessageDialog(null, "Done!");
             }
         });
         return button;
