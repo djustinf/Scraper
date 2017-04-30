@@ -17,7 +17,7 @@ public class Product {
     private  double cost;
 
     @Transient
-    private Map<String, Double> price = new HashMap<String, Double>();
+    private Map<String, String> price = new HashMap<String, String>();
 
     @Column(unique = true)
     private String amazonUrl;
@@ -46,7 +46,7 @@ public class Product {
         this.brand = brand;
     }
 
-    public void addPrice(String desc, double price) {
+    public void addPrice(String desc, String price) {
         this.price.put(desc, price);
     }
 
@@ -54,7 +54,7 @@ public class Product {
         return brand;
     }
 
-    public Map<String, Double> getPrice() {
+    public Map<String,String> getPrice() {
         return price;
     }
 

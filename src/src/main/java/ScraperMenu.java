@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ScraperMenu extends JPanel {
 
@@ -110,7 +112,16 @@ public class ScraperMenu extends JPanel {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //run search
+                List<Product> selected = searchList.getSelectedValuesList();
+                ExecutorService serv = Executors.newCachedThreadPool();
+                for (int i = 0; i < selected.size(); i++) {
+                    serv.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            //crawl in here
+                        }
+                    });
+                }
             }
         });
         return button;
