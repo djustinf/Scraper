@@ -117,15 +117,15 @@ public class ScraperMenu extends JPanel {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<Product> selected = searchList.getSelectedValuesList();
-                List<Product> done = new ArrayList<>();
                 SearchUtils searchUtils = new SearchUtils();
                 ExecutorService serv = Executors.newFixedThreadPool(10);
-                for (Product product : selected) {
+                List<Product> done = new ArrayList<Product>();
+                for (int i = 0; i < searchListModel.size(); i++) {
+                    final int curVal = i;
                     serv.execute(new Runnable() {
                         @Override
                         public void run() {
-                            done.add(searchUtils.getData(product));
+                            done.add(searchUtils.getData((Product)searchListModel.get(curVal)));
                         }
                     });
                 }

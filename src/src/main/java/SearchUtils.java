@@ -46,9 +46,9 @@ public class SearchUtils {
     }
 
     public Product getData(Product product) {
+        java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.SEVERE);
         WebDriver webClient = new HtmlUnitDriver();
         webClient.get(product.getAmazonUrl());
-        System.err.println("Got here");
         for (String tag : amazon) {
             try {
                 WebElement info = webClient.findElement(By.xpath(tag));
@@ -60,6 +60,7 @@ public class SearchUtils {
                 continue;
             }
         }
+        webClient.get(product.getEbayUrl());
         for (String tag : ebay) {
             try {
                 WebElement info = webClient.findElement(By.xpath(tag));
