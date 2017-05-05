@@ -1,10 +1,9 @@
-import com.opencsv.CSVWriter;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -173,17 +172,62 @@ public class ScraperMenu extends JPanel {
         JTextField field5 = new JTextField("<initial cost>");
         JTextField field3 = new JTextField("www.ebay.com/<product URL>");
         JTextField field4 = new JTextField("www.amazon.com/<product URL>");
+        JTextField field6 = new JTextField("www.jet.com/<product URL>");
+        field1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (field1.getText().equals("<product to search>"))
+                    field1.setText("");
+            }
+        });
+        field2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (field2.getText().equals("<product brand>"))
+                    field2.setText("");
+            }
+        });
+        field5.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (field5.getText().equals("<initial cost>"))
+                    field5.setText("");
+            }
+        });
+        field3.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (field3.getText().equals("www.ebay.com/<product URL>"))
+                    field3.setText("");
+            }
+        });
+        field4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (field4.getText().equals("www.amazon.com/<product URL>"))
+                    field4.setText("");
+            }
+        });
+        field6.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (field6.getText().equals("www.jet.com/<product URL>"))
+                    field6.setText("");
+            }
+        });
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Product"));
         panel.add(field1);
         panel.add(new JLabel("Brand"));
         panel.add(field2);
-        panel.add(new JLabel("Cost"));
+        panel.add(new JLabel("Initial Cost"));
         panel.add(field5);
         panel.add(new JLabel("Ebay URL"));
         panel.add(field3);
         panel.add(new JLabel("Amazon URL"));
         panel.add(field4);
+        panel.add(new JLabel("Jet URL"));
+        panel.add(field6);
         int result = JOptionPane.showConfirmDialog(null, panel, "Create a New Product Search",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
@@ -192,7 +236,8 @@ public class ScraperMenu extends JPanel {
             product.setBrand(field2.getText());
             product.setEbayUrl(field3.getText());
             product.setAmazonUrl(field4.getText());
-            product.setCost(Double.parseDouble(field5.getText()));
+            product.setJetUrl(field6.getText());
+            product.setCost(Double.parseDouble(field5.getText().replaceAll("[^0-9.]", "")));
             ProductController.storeProduct(product);
             allListModel.addElement(product);
         }
@@ -211,17 +256,20 @@ public class ScraperMenu extends JPanel {
         JTextField field5 = new JTextField(Double.toString(mod.getCost()));
         JTextField field3 = new JTextField(mod.getEbayUrl());
         JTextField field4 = new JTextField(mod.getAmazonUrl());
+        JTextField field6 = new JTextField(mod.getJetUrl());
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Product"));
         panel.add(field1);
         panel.add(new JLabel("Brand"));
         panel.add(field2);
-        panel.add(new JLabel("Cost"));
+        panel.add(new JLabel("Initial Cost"));
         panel.add(field5);
         panel.add(new JLabel("Ebay URL"));
         panel.add(field3);
         panel.add(new JLabel("Amazon URL"));
         panel.add(field4);
+        panel.add(new JLabel("Jet URL"));
+        panel.add(field6);
         int result = JOptionPane.showConfirmDialog(null, panel, "Modify a Product Search",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
@@ -229,7 +277,8 @@ public class ScraperMenu extends JPanel {
             mod.setBrand(field2.getText());
             mod.setEbayUrl(field3.getText());
             mod.setAmazonUrl(field4.getText());
-            mod.setCost(Double.parseDouble(field5.getText()));
+            mod.setJetUrl(field6.getText());
+            mod.setCost(Double.parseDouble(field5.getText().replaceAll("[^0-9.]", "")));
             ProductController.modifyProduct(mod.getId(), mod);
             allListModel.remove(indices[0]);
             allListModel.addElement(mod);
