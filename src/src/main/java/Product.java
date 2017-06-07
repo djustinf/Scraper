@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/*  This class is the main data persisted in the database. This is done using Hibernate.
+ */
 @Entity
 public class Product {
 
@@ -28,6 +30,10 @@ public class Product {
     private String ebayUrl;
 
     public Product() {}
+
+    /*  This class simply contains all of the getters and setters necessary to manipulate the data
+        contained within the class.
+     */
 
     public void setCost(double cost) {
         this.cost = cost;
@@ -81,6 +87,8 @@ public class Product {
         return cost;
     }
 
+    /*  This method is used to generate a text representation of each object.
+     */
     @Override
     public String toString() {
         return brand + "-" + product;
