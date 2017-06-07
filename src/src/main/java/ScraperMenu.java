@@ -1,3 +1,7 @@
+/*  Daniel Justin Foxhoven
+    June 2017
+    Josh Taylor Senior Project
+ */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +15,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/*  This class is the GUI behind the application.
+ */
 public class ScraperMenu extends JPanel {
 
     private JList<Product> allList;
@@ -37,6 +43,8 @@ public class ScraperMenu extends JPanel {
         setPreferredSize(new Dimension(500, 750));
     }
 
+    /*  Generates the list of all products in the database
+     */
     private JPanel createAllList() {
         allListModel = new DefaultListModel();
         for (Product product : ProductController.getAllProducts())
@@ -49,6 +57,8 @@ public class ScraperMenu extends JPanel {
         return panel;
     }
 
+    /*  Generates the list of all products the user wants to search
+     */
     private JPanel createSearchList() {
         searchListModel = new DefaultListModel();
         searchList = new JList(searchListModel);
@@ -59,6 +69,8 @@ public class ScraperMenu extends JPanel {
         return panel;
     }
 
+    /*  Generates the add product button
+     */
     private JButton createAddButton() {
         JButton button = new JButton("Add Search ->");
         button.addActionListener(new ActionListener() {
@@ -74,6 +86,8 @@ public class ScraperMenu extends JPanel {
         return button;
     }
 
+    /*  Generates the remove product button
+     */
     private JButton createRemoveButton() {
         JButton button = new JButton("<- Remove Search");
         button.addActionListener(new ActionListener() {
@@ -89,6 +103,8 @@ public class ScraperMenu extends JPanel {
         return button;
     }
 
+    /*  Generates the create product button
+     */
     private JButton createFormButton() {
         JButton button = new JButton("Add Product");
         button.addActionListener(new ActionListener() {
@@ -100,6 +116,8 @@ public class ScraperMenu extends JPanel {
         return button;
     }
 
+    /*  Generates the modify product button
+     */
     private JButton createModifyButton() {
         JButton button = new JButton("Modify Product");
         button.addActionListener(new ActionListener() {
@@ -111,6 +129,8 @@ public class ScraperMenu extends JPanel {
         return button;
     }
 
+    /*  Generates the search button. This button kicks off the web crawling process.
+     */
     private JButton createSearchButton() {
         JButton button = new JButton("Run Search");
         button.addActionListener(new ActionListener() {
@@ -121,12 +141,11 @@ public class ScraperMenu extends JPanel {
                 List<Product> done = new ArrayList<Product>();
                 for (int i = 0; i < searchListModel.size(); i++) {
                     final int curVal = i;
-                    serv.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            done.add(searchUtils.getData((Product)searchListModel.get(curVal)));
-                        }
-                    });
+                    if (!((Product)searchListModel.get(curVal)).getAmazonUrl().isEmpty())
+                        serv.execute(() -> searchUtils.getData((Product)searchListModel.get(curVal), searchUtils.amazon, ((Product) searchListModel.get(curVal)).getAmazonUrl(), "Amazon"));
+                    if (!((Product)searchListModel.get(curVal)).getEbayUrl().isEmpty())
+                        serv.execute(() -> searchUtils.getData((Product)searchListModel.get(curVal), searchUtils.ebay, ((Product) searchListModel.get(curVal)).getEbayUrl(), "Ebay"));
+                    done.add((Product)searchListModel.get(curVal));
                 }
                 serv.shutdown();
                 try {
@@ -147,6 +166,8 @@ public class ScraperMenu extends JPanel {
         return button;
     }
 
+    /*  Generates the delete product form button.
+     */
     private JButton createDeleteButton() {
         JButton button = new JButton("Delete Entries");
         button.addActionListener(new ActionListener() {
@@ -166,13 +187,14 @@ public class ScraperMenu extends JPanel {
         return button;
     }
 
+    /*  Generates the new product form.
+     */
     private void displayNewForm() {
         JTextField field1 = new JTextField("<product to search>");
         JTextField field2 = new JTextField("<product brand>");
         JTextField field5 = new JTextField("<initial cost>");
         JTextField field3 = new JTextField("www.ebay.com/<product URL>");
         JTextField field4 = new JTextField("www.amazon.com/<product URL>");
-        JTextField field6 = new JTextField("www.jet.com/<product URL>");
         field1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -208,13 +230,6 @@ public class ScraperMenu extends JPanel {
                     field4.setText("");
             }
         });
-        field6.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (field6.getText().equals("www.jet.com/<product URL>"))
-                    field6.setText("");
-            }
-        });
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Product"));
         panel.add(field1);
@@ -226,8 +241,6 @@ public class ScraperMenu extends JPanel {
         panel.add(field3);
         panel.add(new JLabel("Amazon URL"));
         panel.add(field4);
-        panel.add(new JLabel("Jet URL"));
-        panel.add(field6);
         int result = JOptionPane.showConfirmDialog(null, panel, "Create a New Product Search",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
@@ -236,13 +249,14 @@ public class ScraperMenu extends JPanel {
             product.setBrand(field2.getText());
             product.setEbayUrl(field3.getText());
             product.setAmazonUrl(field4.getText());
-            product.setJetUrl(field6.getText());
             product.setCost(Double.parseDouble(field5.getText().replaceAll("[^0-9.]", "")));
             ProductController.storeProduct(product);
             allListModel.addElement(product);
         }
     }
 
+    /*  Generates the modify product form.
+     */
     private void displayModForm() {
         int[] indices = allList.getSelectedIndices();
         List<Product> selected = allList.getSelectedValuesList();
@@ -256,7 +270,6 @@ public class ScraperMenu extends JPanel {
         JTextField field5 = new JTextField(Double.toString(mod.getCost()));
         JTextField field3 = new JTextField(mod.getEbayUrl());
         JTextField field4 = new JTextField(mod.getAmazonUrl());
-        JTextField field6 = new JTextField(mod.getJetUrl());
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("Product"));
         panel.add(field1);
@@ -268,8 +281,6 @@ public class ScraperMenu extends JPanel {
         panel.add(field3);
         panel.add(new JLabel("Amazon URL"));
         panel.add(field4);
-        panel.add(new JLabel("Jet URL"));
-        panel.add(field6);
         int result = JOptionPane.showConfirmDialog(null, panel, "Modify a Product Search",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
@@ -277,7 +288,6 @@ public class ScraperMenu extends JPanel {
             mod.setBrand(field2.getText());
             mod.setEbayUrl(field3.getText());
             mod.setAmazonUrl(field4.getText());
-            mod.setJetUrl(field6.getText());
             mod.setCost(Double.parseDouble(field5.getText().replaceAll("[^0-9.]", "")));
             ProductController.modifyProduct(mod.getId(), mod);
             allListModel.remove(indices[0]);
@@ -285,6 +295,8 @@ public class ScraperMenu extends JPanel {
         }
     }
 
+    /*  Kicks off the whole GUI.
+     */
     private static void createGUI() {
         JFrame frame = new JFrame("Web Scraper");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -295,6 +307,8 @@ public class ScraperMenu extends JPanel {
         frame.setVisible(true);
     }
 
+    /*  Starts the application.
+     */
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override

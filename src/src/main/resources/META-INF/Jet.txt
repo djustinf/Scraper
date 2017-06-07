@@ -1,2 +1,0 @@
-.//*[@class='price h3 font-bold text-black']
-.//*[@class='price h3 font-bold text-black pl4']

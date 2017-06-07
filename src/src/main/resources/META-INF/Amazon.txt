@@ -1,4 +1,3 @@
-.//*[@class='a-size-medium a-color-price header-price']
-.//*[@class='a-size-medium a-color-price offer-price a-text-normal']
+.//*[@class='buyingPrice']
+.//*[contains(@class, 'a-size-medium a-color-price')]
 .//*[@class='a-color-price']
-.//*[@class='a-size-medium a-color-price']

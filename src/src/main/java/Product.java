@@ -1,8 +1,11 @@
+/*  Daniel Justin Foxhoven
+    June 2017
+    Josh Taylor Senior Project
+ */
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -23,8 +26,6 @@ public class Product {
     private String amazonUrl;
     @Column(length=500, unique = true)
     private String ebayUrl;
-    @Column(length=500, unique = true)
-    private String jetUrl;
 
     public Product() {}
 
@@ -38,10 +39,6 @@ public class Product {
 
     public void setEbayUrl(String pageUrl) {
         this.ebayUrl = pageUrl;
-    }
-
-    public void setJetUrl(String pageUrl) {
-        this.jetUrl = pageUrl;
     }
 
     public void setAmazonUrl(String pageUrl) {
@@ -74,10 +71,6 @@ public class Product {
 
     public String getEbayUrl() {
         return ebayUrl;
-    }
-
-    public String getJetUrl() {
-        return jetUrl;
     }
 
     public String getAmazonUrl() {
